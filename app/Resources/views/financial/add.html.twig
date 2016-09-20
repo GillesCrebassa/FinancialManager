@@ -1,0 +1,14 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}Add a new environment{% endblock %}
+{% block body %}
+ <div class="container">
+{{ form_start(form) }}
+{{ form_errors(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.description , {'required': false})}}
+    {{ form_widget(form.save, { 'label': 'Save' }) }}
+{{ form_end(form) }}
+    
+</div>
+{%  endblock body %}

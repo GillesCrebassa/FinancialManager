@@ -1,0 +1,12 @@
+<<<<<<< HEAD
+vendor
+nbproject
+composer.lock
+composer.phar
+/vendor/
+.ssh
+
+# Commit your application's lock file http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file
+# You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
+# composer.lock
+>>>>>>> 179d5374be602baf99aa049d3c5606929812d77a

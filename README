@@ -1,0 +1,35 @@
+# Install:
+
+fill the file app/config/parameters.yml for parameters database_*
+Mysql:
+create database financial;
+CREATE USER 'financial'@'localhost' IDENTIFIED BY 'finanacial';
+GRANT ALL PRIVILEGES ON financial.* TO 'financial'@'localhost';
+flush privileges;
+# to create new entity
+php app/console doctrine:generate:entity
+# when existing database
+
+#php app/console doctrine:database:drop --force
+php app/console doctrine:database:create
+php app/console doctrine:schema:update --force
+# generate repository /entity for one entity
+# generate repository / entity / getter/setter for all entity
+#php app/console doctrine:generate:entities AppBundle
+
+# debug the routes
+php app/console debug:router --env=prod
+
+
+# for css , js ...
+php app/console assets:install --symlink
+
+php app/console cache:clear
+php app/console assets:install --symlink
+php app/console assetic:dump
+
+
+git push https://github.com/GillesCrebassa/FinancialManager.git
+git pull https://github.com/GillesCrebassa/FinancialManager.git
+
+

@@ -1,0 +1,12 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: 127.0.0.1
+    database_port: 3306
+    database_name: financial
+    database_user: financial
+    database_password: financial
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: 1080
+    mailer_password: null
+    secret: WazaBleem
