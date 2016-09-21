@@ -3,12 +3,13 @@
 fill the file app/config/parameters.yml for parameters database_*
 Mysql:
 create database financial;
-CREATE USER 'financial'@'localhost' IDENTIFIED BY 'finanacial';
+CREATE USER 'financial'@'localhost' IDENTIFIED BY 'financial';
 GRANT ALL PRIVILEGES ON financial.* TO 'financial'@'localhost';
 flush privileges;
 # to create new entity
 php app/console doctrine:generate:entity
 # when existing database
+php app/console doctrine:schema:update --force
 
 #php app/console doctrine:database:drop --force
 php app/console doctrine:database:create

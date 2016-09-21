@@ -15,7 +15,11 @@ class DefaultController extends Controller
      */
     public function homeAction(Request $request)
     {
-        print("work");
+
+        return $this->render('default/index.html.twig', array(
+            'test' => 'test',
+        ));
+
     }
 }
 
