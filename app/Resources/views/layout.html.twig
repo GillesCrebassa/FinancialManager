@@ -1,30 +1,95 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8" />
-    </head>
-    <body>
-        <div>
+{% extends "base.html.twig" %}
+
+{% block navbar %}
+  <nav id="navbar-main">
+      <!-- Fixed navbar -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon icon-shield" style="font-size:30px; color:#3498db;"></span>
+          </button>
+          <a class="navbar-brand hidden-xs hidden-sm" href="#home"><span class="icon icon-shield" style="font-size:18px; color:#3498db;"></span></a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/" class="smoothScroll">Home</a></li>
+            <li> <a href="/about" class="smoothScroll"> About</a></li>
+            <li> <a href="/contact" class="smoothScroll"> Contact</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+		<li>
             {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
+                {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}
                 <a href="{{ path('fos_user_security_logout') }}">
                     {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
                 </a>
             {% else %}
                 <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
             {% endif %}
+		</li>
+          </ul>
+         </div>
         </div>
-        {% for type, messages in app.session.flashBag.all %}
-            {% for message in messages %}
-                <div class="{{ type }}">
-                    {{ message|trans({}, 'FOSUserBundle') }}
-                </div>
-            {% endfor %}
+        </div>
+    </nav>
+<br>
+<br>
+<br>
+    {% for label, flashes in app.session.flashbag.all %}
+        {% for flash in flashes %}
+            <div class="alert alert-{{ label }}">
+                {{ flash }}
+            </div>
         {% endfor %}
-aaaaa
-        <div>
-            {% block fos_user_content %}
-            {% endblock fos_user_content %}
+    {% endfor %}
+{% endblock %}
+    
+    
+{% block footer %}
+    <footer class="navbar navbar-inverse navbar-fixed-bottom">
+        <div class="container">
+            <div class="row centered">
+                    Created by <a href="https://be.linkedin.com/in/crebassagilles" target="_blank">Crebassa Gilles</a> - Copyright 2016
+            </div>
         </div>
-    </body>
-</html>
+    </footer><!-- end footer -->
+{% endblock %}
+{% block header_javascripts %}
+    <script type="text/javascript" src="{{ asset('assets/js/jquery.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/bootstrap.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/modern-business.js')}}"></script>            
+{% endblock %}
+{% block footer_javascripts %}   
+	<script type="text/javascript" src="{{ asset('assets/js/bootstrap.min.js')}}"></script>
+	<script type="text/javascript" src="{{ asset('assets/js/retina.js')}}"></script>
+	<script type="text/javascript" src="{{ asset('assets/js/jquery.easing.1.3.js')}}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/smoothscroll.js')}}"></script>
+	<script type="text/javascript" src="{{ asset('assets/js/jquery-func.js')}}"></script>
+        <script type="text/javascript">
+$(document).ready (function(){
+$(".alert").delay(4000).slideUp(200, function() {
+    $(this).alert('close');
+});
+});            
+        </script>
+{% endblock %}
+        
+{% block stylesheets %} 
+    <!-- Bootstrap core CSS -->
+    <link href="{{ asset('assets/css/bootstrap.css')}}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="{{ asset('assets/css/main.css')}}">
+<!-- TODO change icon -->
+    <link rel="stylesheet" href="{{ asset('assets/css/icomoon.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/css/animate-custom.css')}}">
+
+
+    
+<!--    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
+-->
+            
+{% endblock %}
+            
