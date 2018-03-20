@@ -190,6 +190,9 @@ class FinancialController extends Controller
     
     private function extractXlsToDb($id,$filename)
     {
+                $csvManager = $this->get('phpoffice.spreadsheet');
+                $csvReader = $csvManager->createReader('Csv');
+                $csvFields->load($filename);
 //        print_r($id);
 //        print_r($filename);
                 $em = $this->getDoctrine()->getManager();

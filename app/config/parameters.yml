@@ -10,5 +10,3 @@ parameters:
     mailer_user: 1080
     mailer_password: null
     secret: WazaBleem
-
-    accountsStatementFile_directory: '%kernel.root_dir%/public/uploads/accountsStatements'
