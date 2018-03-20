@@ -10,7 +10,8 @@ parameters:
 
 framework:
     #esi:             ~
-    translator:      { fallbacks: ["%locale%"] }
+    #translator:      { fallbacks: ["%locale%"] }
+    translator:      ~
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -71,7 +72,20 @@ swiftmailer:
 
 
 fos_user:
-
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
     user_class: AppBundle\Entity\User
+    from_email:
+        address:        noreply@finman.com
+        sender_name:    Financial Manager
+    registration:
+        confirmation:
+            enabled: true
+            from_email:
+                address:        registration@finman.com
+                sender_name:    Registration
+    resetting:
+        email:
+            from_email:
+                address:        resetting@example.com
+                sender_name:    Resetting

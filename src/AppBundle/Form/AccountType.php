@@ -8,26 +8,27 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 
-class EnvironmentType extends AbstractType
+class AccountType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name','text')
-            ->add('description','textarea')
-            ->add('save', 'submit')
+            ->add('Id','text')
+            ->add('userId','text')
+            ->add('accountName','text')
+            ->add('accountReference','text')
         ;
     }
     
     public function getName()
     {
-        return 'environment';
+        return 'account';
     }    
     
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Environment',
+            'data_class' => 'AppBundle\Entity\Account',
         ));
     }    
 }

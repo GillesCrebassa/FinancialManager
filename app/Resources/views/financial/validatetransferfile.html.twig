@@ -1,0 +1,70 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}validate transfer file{% endblock %}
+{% block body %}
+    <!-- TODO IF NO DATA --->
+ <div class="container">
+    <div class='row'> 
+     {{ filename }}
+    <table id="summary" class="display" cellspacing="0" width="100%">
+    <thead>
+           <tr>
+               <th><input type='checkbox'/></th>
+               <!-- TODO add check all -->
+                <th>id</th>
+                <th>accountsStatementFileId</th>
+                <th>sequenceNumber</th>
+                <th>executionDate</th>
+                <th>valueDate</th>
+                <th>amount</th>
+                <th>currency</th>
+                <th>counterpartment</th>
+                <th>details</th>
+            </tr>
+    </thead>
+       <!--<tfoot> -->
+    <tbody>
+{% for transfer in transferList %}     
+        <tr>
+            <th><input type='checkbox' name='cb_{{transfer.id}}' id='{{transfer.id}}'/></th>
+            <th>{{transfer.id}}</th>
+            <th>{{transfer.accountsStatementFileId}}</th>
+            <th>{{transfer.sequenceNumber}}</th>
+            <th>{{transfer.executionDate}}</th>
+            <th>{{transfer.valueDate}}</th>
+            <th>{{transfer.amount}}</th>
+            <th>{{transfer.currency}}</th>
+            <th>{{transfer.counterpartment}}</th>
+            <th>{{transfer.details}}</th>
+        </tr>
+{% endfor %}
+
+    </tbody>
+    </table>
+    </div>
+    <div class='row' align='right'> 
+             <th><input type='button' name='btn'>validate</input></th>
+             <!-- TODO javascript to execute -->
+    </div>
+ </div>
+
+
+    
+{%  endblock body %}
+
+
+{% block javascripts %}
+    <script type='text/javascript'>
+    jQuery( document ).ready( function( $ ) {
+    jQuery('#summary').DataTable({
+        "paging":   true,
+        "ordering": true,
+        "info":     false,
+        "searching": true
+    });
+    } );
+    </script>
+
+
+
+{% endblock javascripts %}

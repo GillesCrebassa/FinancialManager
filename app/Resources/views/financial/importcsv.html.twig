@@ -1,0 +1,13 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}Import a csv file{% endblock %}
+{% block body %}
+ <div class="container">
+{{ form_start(form) }}
+{{ form_errors(form) }}
+    {{ form_row(form.fileName) }}
+    {{ form_widget(form.submit, { 'label': 'Import' }) }}
+{{ form_end(form) }}
+    
+</div>
+{%  endblock body %}
