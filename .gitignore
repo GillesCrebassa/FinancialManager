@@ -23,7 +23,7 @@ composer.phar
 !var/sessions/.gitkeep
 
 # Parameters
-/app/config/parameters.yml
+/app/config/*.yml
 /app/config/parameters.ini
 
 # Managed by Composer

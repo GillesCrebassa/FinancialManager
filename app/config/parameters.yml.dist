@@ -10,10 +10,12 @@ parameters:
     # You should uncomment this if you want use pdo_sqlite
     # database_path: "%kernel.root_dir%/data.db3"
 
+    # for mail intergation, you can use https://mailtrap.io or local server https://mailcatcher.me/
     mailer_transport:  smtp
     mailer_host:       smtp.mailtrap.io
     mailer_user:       ~
     mailer_password:   ~
+    mailer_port:       2525 
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
