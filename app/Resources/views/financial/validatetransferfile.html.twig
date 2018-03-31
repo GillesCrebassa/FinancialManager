@@ -2,14 +2,15 @@
 
 {% block title %}validate transfer file{% endblock %}
 {% block body %}
-    <!-- TODO IF NO DATA --->
- <div class="container">
-    <div class='row'> 
+    <!-- TODO IF NO DATA -->
      {{ filename }}
-    <table id="summary" class="display" cellspacing="0" width="100%">
+<!--     <div class="clearfix"></div>-->
+     
+    <div class="table-responsible">
+    <table id="datatable-checkbox" class="table table-striped table-bordered bulk_action">
     <thead>
            <tr>
-               <th><input type='checkbox'/></th>
+               <th><input type="checkbox" id="check-all" class="flat"></th></th>
                <!-- TODO add check all -->
                 <th>id</th>
                 <th>accountsStatementFileId</th>
@@ -26,7 +27,7 @@
     <tbody>
 {% for transfer in transferList %}     
         <tr>
-            <th><input type='checkbox' name='cb_{{transfer.id}}' id='{{transfer.id}}'/></th>
+            <th><input type="checkbox" class="flat" name='table_records' id='{{transfer.id}}'/></th>
             <th>{{transfer.id}}</th>
             <th>{{transfer.accountsStatementFileId}}</th>
             <th>{{transfer.sequenceNumber}}</th>
@@ -41,30 +42,20 @@
 
     </tbody>
     </table>
+    <!--
+    <div class='col-md-12 col-sm-12 col-xs-12' align='right'> 
+             <input type='button' name='btn'>validate</input>
+             <!-- TODO javascript to execute --><!--
     </div>
-    <div class='row' align='right'> 
-             <th><input type='button' name='btn'>validate</input></th>
-             <!-- TODO javascript to execute -->
-    </div>
- </div>
-
+    -->
+</div>
 
     
-{%  endblock body %}
+{%  endblock %}
 
 
-{% block javascripts %}
-    <script type='text/javascript'>
-    jQuery( document ).ready( function( $ ) {
-    jQuery('#summary').DataTable({
-        "paging":   true,
-        "ordering": true,
-        "info":     false,
-        "searching": true
-    });
-    } );
-    </script>
+{% block page_footer_javascripts %}
+{% endblock %}
 
-
-
-{% endblock javascripts %}
+{% block page_stylesheets %} 
+{% endblock %}

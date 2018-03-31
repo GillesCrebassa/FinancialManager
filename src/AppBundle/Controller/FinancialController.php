@@ -57,22 +57,32 @@ class FinancialController extends Controller
                 $accountsStatementFile->setUserId($user->getId());
                 
                 
-                
+                // TODO add status error
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($accountsStatementFile);
                 $em->flush();
-
-                $returnXls = $this->extractXlsToDb($accountsStatementFile->getId(),$this->getParameter('accountsStatementFile_directory'). "/" . $fileName);
-                $returnXls = true;
                 
+                $returnXls = $this->extractXlsToDb($accountsStatementFile->getId(),$this->getParameter('accountsStatementFile_directory'). "/" . $fileName);
                 if ($returnXls == true)
                 {
-                $this->addFlash(
-                        'success',
-                        'Your new file '.$fileOriginal.' were saved!'
-                );
-                return $this->redirectToRoute('validatetransferfile', array('fileId'=>$accountsStatementFile->getId()));
+                    unlink($this->getParameter('accountsStatementFile_directory').'/'.$fileName);
+                    $this->addFlash(
+                            'success',
+                            'Your new file '.$fileOriginal.' were imported!'
+                    );
+                    return $this->redirectToRoute('validatetransferfile', array('fileId'=>$accountsStatementFile->getId()));
                 
+                }
+                else
+                {
+                    //TODO No color for error ?
+                    // special page for all errors ?
+/*                    $this->addFlash(
+                        'error',
+                        'An issue has detected during the import!</br>'.$error
+ 
+                );
+*/                    
                 }
 // EXEM                return $this->redirectToRoute('release_show', array('id' => $release->getId()));
                 //return $this->redirectToRoute('importcsv');
@@ -122,7 +132,8 @@ class FinancialController extends Controller
             
         }
 //        print_r($file);
-        print_r($file[0]->getOriginalFilename());
+        // TODO Check if transfer already exists
+        //print_r($file[0]->getOriginalFilename());
         $TransferAccountsStatementFileRepository = $em->getRepository('AppBundle:TransferAccountsStatementFile');
         $transferList=$TransferAccountsStatementFileRepository->findByFileId($fileId);
         // TODO Check if the accountId is user logged, otherwise, refuse.
@@ -190,27 +201,56 @@ class FinancialController extends Controller
     
     private function extractXlsToDb($id,$filename)
     {
+                $em = $this->getDoctrine()->getManager();
+        // TODO ROLLBACK/COMMIT
                 $csvManager = $this->get('phpoffice.spreadsheet');
                 $csvReader = $csvManager->createReader('Csv');
-                $csvFields->load($filename);
+                $spreadsheet = $csvReader->load($filename);
 //        print_r($id);
 //        print_r($filename);
-                $em = $this->getDoctrine()->getManager();
+                $sheetData = $spreadsheet->getActiveSheet()->toArray();
+                //print_r($sheetData);
+                $rowNumber = sizeof($sheetData);
+                
+                for ($i=1;$i<$rowNumber;$i++)
+                {
+                    $rowData=$sheetData[$i];
+                    $columnNumber=sizeof($rowData);
+                    print($columnNumber);
+                    if ($columnNumber != 8)
+                    {
+                        // TODO ERROR with line
+                        $this->addFlash(
+                            'error',
+                            'An issue has detected during the import in the line '.$i.'!'
+                                . 'The number of culomn is not 8'
+                        );
+                        $em->clear(); 
+                        return false;
+                    }
+                    // TODO check this account + SequenceNumber not existing and already insert in File and Transfer
+                    $transferAccountsStatementFile = new \AppBundle\Entity\TransferAccountsStatementFile();
+                    
+                    $transferAccountsStatementFile->setAccountsStatementFileId($id);
 
-                $transferAccountsStatementFile = new \AppBundle\Entity\TransferAccountsStatementFile();
-// TODO loop
-                $transferAccountsStatementFile->setAccountsStatementFileId($id);
-                $transferAccountsStatementFile->setAmount(10);
-                $transferAccountsStatementFile->setCounterpartment("blala1");
-                $transferAccountsStatementFile->setCurrency("EUR");
-                $transferAccountsStatementFile->setDetails("virement");
-                $transferAccountsStatementFile->setExecutionDate("20172431");
-                $transferAccountsStatementFile->setSequenceNumber(12);
-                $transferAccountsStatementFile->setValueDate("20170221");
+                    $transferAccountsStatementFile->setSequenceNumber($rowData[0]);
+                    $transferAccountsStatementFile->setExecutionDate($rowData[1]);
+                    $transferAccountsStatementFile->setValueDate($rowData[2]);
+                    $transferAccountsStatementFile->setAmount($rowData[3]);
+                    $transferAccountsStatementFile->setCurrency($rowData[4]);
+                    $transferAccountsStatementFile->setCounterpartment($rowData[5]);
+                    $transferAccountsStatementFile->setDetails($rowData[6]);
+//                    $transferAccountsStatementFile->setAccountNumber($rowData[7]);
+                    $em->persist($transferAccountsStatementFile);
+
              // Open file   
                 
-                $em->persist($transferAccountsStatementFile);
+                    
+                }
                 $em->flush();
+                $em->clear();
+                return true;
+// TODO loop
     }
     
 }

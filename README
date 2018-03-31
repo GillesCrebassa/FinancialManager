@@ -27,7 +27,8 @@ php app/console assets:install --symlink
 
 php app/console cache:clear
 php app/console assets:install --symlink
-php app/console assetic:dump
+# REMOVED
+#php app/console assetic:dump
 
 
 git push https://github.com/GillesCrebassa/FinancialManager.git

@@ -1,32 +1,36 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang=""> <!--<![endif]-->
-    <head>
+<html lang="en">
+  <head>
         {% block meta %}
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
             <meta charset="utf-8">
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+
             <meta name="description" content="Financial Manager">
             <meta name="author" content="Crebassa Gilles">
-            <link rel="shortcut icon" href="{{ asset('assets/ico/favicon.png') }}">            
+            <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/images/favicon.ico') }}">            
         {% endblock %}
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
         {% block header_javascripts %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    </head><!-- end head -->
-    <body>
-        <!--[if lt IE 8]>
-            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
-        <div class='preloader'><div class='loaded'>&nbsp;</div></div>
+    </head>
+    <body class="nav-md"> 
+        <div class="container body">
+            <div class="main_container">
 
-        {% block navbar %}{% endblock %}            
-        {% block body %}{% endblock %}
+                {% block leftsidebar %}{% endblock %}            
+                {% block navbar %}{% endblock %}
+                <div class="right_col" role="main">
+                    <div class="">
 
-        {% block footer %}{% endblock %}
-        {% block footer_javascripts %}{% endblock %}
-    </body><!-- end body -->
+            
+            {% block body %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+            {% block footer %}{% endblock %}
+
+            {% block footer_javascripts %}{% endblock %}
+    </body>
 </html>
