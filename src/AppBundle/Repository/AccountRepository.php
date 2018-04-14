@@ -17,5 +17,17 @@ class AccountRepository extends \Doctrine\ORM\EntityRepository
                 'SELECT e FROM AppBundle:Account e ORDER BY e.id ASC'
             )
             ->getResult();
+    }
+
+	public function findByAccountReference($accountReference)
+    {
+        $query= $this->getEntityManager()
+            ->createQuery(
+                'SELECT e FROM AppBundle:Account e WHERE e.accountReference = :accountReference')
+            ->setParameter("accountReference",$accountReference)
+                ;
+
+            return $query->getSingleResult();
     }       
+
 }

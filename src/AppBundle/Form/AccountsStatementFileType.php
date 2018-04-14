@@ -7,7 +7,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\FileType ;
-
+use AppBundle\Entity\AccountsStatementFile;
 
 class AccountsStatementFileType extends AbstractType
 {
@@ -15,20 +15,15 @@ class AccountsStatementFileType extends AbstractType
     {
         $builder
             ->add('fileName', FileType::class)
-                ->add('submit',SubmitType::class, array(
-                                'attr' => array('class' => 'save')))
+                ->add('submit',SubmitType::class)
+                ->add('cancel',SubmitType::class)
         ;
     }
-    
-    public function getName()
-    {
-        return 'accountsStatementFile';
-    }    
-    
+        
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\AccountsStatementFile',
+            'data_class' => AccountsStatementFile::class,
         ));
     }    
 }

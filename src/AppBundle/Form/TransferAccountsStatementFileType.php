@@ -22,9 +22,7 @@ class TransferAccountsStatementFileType extends AbstractType
             ->add('currency', TextType::class)
             ->add('counterpartment', TextType::class)
             ->add('details', TextType::class)
-/*                ->add('submit',SubmitType::class, array(
-                                'attr' => array('class' => 'save')))
-        */;
+        ;
     }
     
     public function getName()

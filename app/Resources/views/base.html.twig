@@ -23,6 +23,13 @@
                 {% block navbar %}{% endblock %}
                 <div class="right_col" role="main">
                     <div class="">
+                            {% for label, flashes in app.session.flashbag.all %}
+                                {% for flash in flashes %}
+                                    <div class="alert alert-{{ label }}">
+                                        {{ flash }}
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
 
             
             {% block body %}{% endblock %}

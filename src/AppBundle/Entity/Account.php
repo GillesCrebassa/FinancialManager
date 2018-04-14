@@ -27,13 +27,13 @@ class Account
     private $id;
 
     /**
-     * @var int
+     * @var user
      *
-     * @ORM\Column(name="userId", type="integer")
+     * @ORM\ManyToOne(targetEntity="User",inversedBy="accounts")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")     
      * @Assert\NotBlank()
      */
-    // TODO to link with User
-    private $userId;
+    private $user;
 
     /**
      * @var string
@@ -49,8 +49,19 @@ class Account
      */
     private $accountReference;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="Transfer", mappedBy="account")
+     */
+    private $transfers;
+
+
+
+
+
     public function __construct()
     {
+        $this->transfers = new ArrayCollection();
     }    
     
     public function __toString()
@@ -68,27 +79,27 @@ class Account
     }
 
     /**
-     * Set userId
+     * Set user
      *
-     * @param string userId
+     * @param string user
      *
-     * @return userId
+     * @return user
      */
-    public function setUserId($userId)
+    public function setUser($user)
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Get userId
+     * Get user
      *
      * @return string
      */
-    public function getUserId()
+    public function getUser()
     {
-        return $this->userId;
+        return $this->user;
     }
 
     /**
@@ -138,5 +149,11 @@ class Account
     {
         return $this->accountReference;
     }
+    
+    public function getTransfers()
+    {
+        return $this->transfers;
+    }
+
     
 }

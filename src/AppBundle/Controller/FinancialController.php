@@ -9,7 +9,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use AppBundle\Entity\AccountsStatementFile;
 use AppBundle\Form\AccountsStatementFileType;
 use AppBundle\Entity\TransferAccountsStatementFile;
-
+use AppBundle\Entity\Transfer;
+use AppBundle\Entity\Account;
 
 class FinancialController extends Controller
 {
@@ -28,8 +29,8 @@ class FinancialController extends Controller
                 );
                 return $this->redirectToRoute('importcsv');
         }*/
-        $user = $this->container->get('security.context')->getToken()->getUser();
-        if ($user == 'anon.')
+        $user = $this->getUser();
+        if (Empty($user))
         {
             $this->addFlash(
                         'error',
@@ -39,8 +40,21 @@ class FinancialController extends Controller
             return $this->redirectToRoute('fos_user_security_login');
         }
 
-        $accountsStatementFile = new \AppBundle\Entity\AccountsStatementFile();
-        $form= $this->createForm(new \AppBundle\Form\AccountsStatementFileType(), $accountsStatementFile);
+/* for menu */
+        $em = $this->getDoctrine()->getManager();
+        $TransferAccountsStatementFileRepository = $em->getRepository('AppBundle:TransferAccountsStatementFile');
+
+        $TransferAccountsStatementFileByUser = $TransferAccountsStatementFileRepository->findFileIdByUserId($user->getId());
+
+        print_r($TransferAccountsStatementFileByUser);
+
+
+
+
+
+
+        $accountsStatementFile = new AccountsStatementFile();
+        $form= $this->createForm(AccountsStatementFileType::class, $accountsStatementFile);
 
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);
@@ -62,7 +76,7 @@ class FinancialController extends Controller
                 $em->persist($accountsStatementFile);
                 $em->flush();
                 
-                $returnXls = $this->extractXlsToDb($accountsStatementFile->getId(),$this->getParameter('accountsStatementFile_directory'). "/" . $fileName);
+                $returnXls = $this->extractXlsToDb($accountsStatementFile->getId(),$this->getParameter('accountsStatementFile_directory'). "/" . $fileName,$user);
                 if ($returnXls == true)
                 {
                     unlink($this->getParameter('accountsStatementFile_directory').'/'.$fileName);
@@ -105,8 +119,9 @@ class FinancialController extends Controller
      */
     public function validateTransferFileAction(Request $request,$fileId)
     {
-        $user = $this->container->get('security.context')->getToken()->getUser();
-        if ($user == 'anon.')
+
+        $user = $this->getUser();
+        if (Empty($user))
         {
             $this->addFlash(
                         'error',
@@ -116,8 +131,11 @@ class FinancialController extends Controller
             return $this->redirectToRoute('fos_user_security_login');
         }
 
+
+
         $em = $this->getDoctrine()->getManager();
         $AccountsStatementFileRepository = $em->getRepository('AppBundle:AccountsStatementFile');
+
         $file=$AccountsStatementFileRepository->findById($fileId);
         // Only one record
         $userId = $file[0]->getUserId();
@@ -131,14 +149,83 @@ class FinancialController extends Controller
             return $this->redirectToRoute('home');
             
         }
-//        print_r($file);
-        // TODO Check if transfer already exists
-        //print_r($file[0]->getOriginalFilename());
+
+
+// for menu
+        $TransferAccountsStatementFileRepository = $em->getRepository('AppBundle:TransferAccountsStatementFile');
+
+
+        $TransferAccountsStatementFileByUser = $TransferAccountsStatementFileRepository->findFileIdByUserId($user->getId());
+
+        print_r($TransferAccountsStatementFileByUser);
+
+
+
+
+
+
+        if ($request->getMethod() == 'POST') 
+        {
+            $transferIds=$request->get('transfer_id');
+            $TransferAccountsStatementFileRepository = $em->getRepository('AppBundle:TransferAccountsStatementFile');
+            
+            foreach ($transferIds as $transferId => $id) 
+            {
+//                print_r($transferId);
+                // print_r($id);
+                // print_r("<br>");
+            
+                $TransferAccountsStatementFileIds=$TransferAccountsStatementFileRepository->findById($id);
+                if (count($TransferAccountsStatementFileIds) == 1)
+                {
+                    $TransferAccountsStatementFileId = $TransferAccountsStatementFileIds[0];
+                    //print_r($TransferAccountsStatementFileId);
+                
+                $em = $this->getDoctrine()->getManager();
+                $transfer = new Transfer();
+                $AccountRepository = $em->getRepository('AppBundle:Account');
+                $account = $AccountRepository->findByAccountReference($TransferAccountsStatementFileId->getAccountNumber());
+
+                if (empty($account))
+                {
+                    $account = new Account();
+                    $account->setUser($user);
+                    $account->setAccountName($TransferAccountsStatementFileId->getAccountNumber());
+                    $account->setAccountReference($TransferAccountsStatementFileId->getAccountNumber());
+                    $em->persist($account);
+                }
+                // Check account array (1)
+                $transfer->setAccount($account);
+                // TODO check if record already exists
+                $transfer->setSequenceNumber($TransferAccountsStatementFileId->getSequenceNumber());
+                $transfer->setExecutionDate($TransferAccountsStatementFileId->getExecutionDate());
+                $transfer->setValueDate($TransferAccountsStatementFileId->getValueDate());
+                $transfer->setAmount($TransferAccountsStatementFileId->getAmount());
+                $transfer->setCurrency($TransferAccountsStatementFileId->getCurrency());
+                $transfer->setCounterpartment($TransferAccountsStatementFileId->getCounterpartment());
+                $transfer->setDetails($TransferAccountsStatementFileId->getdetails());
+
+                $em->persist($transfer);
+                $em->remove($TransferAccountsStatementFileId);
+                $em->flush();
+                $this->addFlash(
+                        'info',
+                        'record '.$id.' ok'
+                );
+                
+                }
+                else
+                {    
+                    $this->addFlash(
+                        'error',
+                        'inconsistance of the database'
+                    );
+                }
+            }
+        }
+
         $TransferAccountsStatementFileRepository = $em->getRepository('AppBundle:TransferAccountsStatementFile');
         $transferList=$TransferAccountsStatementFileRepository->findByFileId($fileId);
-        // TODO Check if the accountId is user logged, otherwise, refuse.
-        //$this->view->title = "summary";
-        //$this->view->transferList = $transferList;
         // TODO check when empty
         return $this->render('financial/validatetransferfile.html.twig', array(
             'transferList' => $transferList,
@@ -153,10 +240,11 @@ class FinancialController extends Controller
      */
     public function listTransferAction(Request $request)
     {
+/* TODO 
         $user = $this->container->get('security.context')->getToken()->getUser();
         print_r($user->getId());  
         return print_r($user);  
-        
+        */
         /*
         $listAccount = new ListAccount();
         $form= $this->createForm(new EnvironmentType(), $environment);
@@ -199,7 +287,7 @@ class FinancialController extends Controller
         return md5(uniqid());
     }
     
-    private function extractXlsToDb($id,$filename)
+    private function extractXlsToDb($id,$filename,$user)
     {
                 $em = $this->getDoctrine()->getManager();
         // TODO ROLLBACK/COMMIT
@@ -240,7 +328,8 @@ class FinancialController extends Controller
                     $transferAccountsStatementFile->setCurrency($rowData[4]);
                     $transferAccountsStatementFile->setCounterpartment($rowData[5]);
                     $transferAccountsStatementFile->setDetails($rowData[6]);
-//                    $transferAccountsStatementFile->setAccountNumber($rowData[7]);
+                    $transferAccountsStatementFile->setAccountNumber($rowData[7]);
+                    $transferAccountsStatementFile->setUser($user);
                     $em->persist($transferAccountsStatementFile);
 
              // Open file   

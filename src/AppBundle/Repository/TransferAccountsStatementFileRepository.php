@@ -29,5 +29,13 @@ class TransferAccountsStatementFileRepository extends \Doctrine\ORM\EntityReposi
                 'SELECT e FROM AppBundle:TransferAccountsStatementFile e where e.accountsStatementFileId='.$fileId)        
             ->getResult();
     }      
-    
+
+   public function findFileIdByUserId($userId)
+    {
+       // TODO WHERE CLAUSE
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT distinct(e.accountsStatementFileId) FROM AppBundle:TransferAccountsStatementFile e where e.user='.$userId)        
+            ->getResult();
+    }
 }

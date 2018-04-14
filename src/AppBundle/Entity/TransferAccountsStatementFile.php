@@ -85,6 +85,22 @@ class TransferAccountsStatementFile
      */
     private $details;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="accountNumber", type="string", length=20, nullable=false)
+     */
+    private $accountNumber;
+    /**
+     * @var user
+     *
+     * @ORM\ManyToOne(targetEntity="User",inversedBy="transferFile")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")     
+     * @Assert\NotBlank()
+     */
+    private $user;
+
+
 
     public function __construct()
     {
@@ -133,7 +149,7 @@ class TransferAccountsStatementFile
      *
      * @param string sequenceNumber
      *
-     * @return Transfer
+     * @return TransferAccountsStatementFile
      */
     public function setSequenceNumber($sequenceNumber)
     {
@@ -158,7 +174,7 @@ class TransferAccountsStatementFile
      *
      * @param string executionDate
      *
-     * @return Transfer
+     * @return TransferAccountsStatementFile
      */
     public function setExecutionDate($executionDate)
     {
@@ -182,7 +198,7 @@ class TransferAccountsStatementFile
      *
      * @param string valueDate
      *
-     * @return Transfer
+     * @return TransferAccountsStatementFile
      */
     public function setValueDate($valueDate)
     {
@@ -207,7 +223,7 @@ class TransferAccountsStatementFile
      *
      * @param string amount
      *
-     * @return Transfer
+     * @return TransferAccountsStatementFile
      */
     public function setAmount($amount)
     {
@@ -233,7 +249,7 @@ class TransferAccountsStatementFile
      *
      * @param string currency
      *
-     * @return Transfer
+     * @return TransferAccountsStatementFile
      */
     public function setCurrency($currency)
     {
@@ -257,7 +273,7 @@ class TransferAccountsStatementFile
      *
      * @param string counterpartment
      *
-     * @return Transfer
+     * @return TransferAccountsStatementFile
      */
     public function setCounterpartment($counterpartment)
     {
@@ -283,7 +299,7 @@ class TransferAccountsStatementFile
      *
      * @param string details
      *
-     * @return Transfer
+     * @return TransferAccountsStatementFile
      */
     public function setDetails($details)
     {
@@ -302,7 +318,53 @@ class TransferAccountsStatementFile
         return $this->details;
     }    
     
-        
-    
-    
+    /**
+     * Set accountNumber
+     *
+     * @param string accountNumber
+     *
+     * @return TransferAccountsStatementFile
+     */
+    public function setAccountNumber($accountNumber)
+    {
+        $this->accountNumber = $accountNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get accountNumber
+     *
+     * @return string
+     */
+    public function getAccountNumber()
+    {
+        return $this->accountNumber;
+    }
+
+    /**
+     * Set user
+     *
+     * @param string user
+     *
+     * @return TransferAccountsStatementFile
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return string
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+
 }

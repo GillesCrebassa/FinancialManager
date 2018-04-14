@@ -27,13 +27,12 @@ class Transfer
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="accountId", type="integer")
-     * @Assert\NotBlank()
+    * @var account    
+    * @ORM\ManyToOne(targetEntity="Account",inversedBy="transfers")
+    * @ORM\JoinColumn(name="account_id", referencedColumnName="id")     
+    * @Assert\NotBlank()
      */
-    // TODO to link with Account
-    private $accountId;
+    private $account;
 
     /**
      * @var string
@@ -105,27 +104,27 @@ class Transfer
     }
 
     /**
-     * Set accountId
+     * Set account
      *
-     * @param string accountId
+     * @param string account
      *
      * @return Transfer
      */
-    public function setAccountId($accountId)
+    public function setAccount($account)
     {
-        $this->accountId = $accountId;
+        $this->account = $account;
 
         return $this;
     }
 
     /**
-     * Get accountId
+     * Get account
      *
      * @return string
      */
-    public function getAccountId()
+    public function getAccount()
     {
-        return $this->accountId;
+        return $this->account;
     }
 
     /**

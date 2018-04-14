@@ -34,6 +34,16 @@
                     <ul class="nav child_menu">
                       <li><a href="{{ app.request.basePath }}/dashboard">DashBoard</a></li>
                       <li><a href="{{ app.request.basePath }}/financialimportcsv">import new csv</a></li>
+                        <li><a>validate transfer imported<span class="fa fa-chevron-down"></span></a>
+                          <ul class="nav child_menu">
+                            <li class="sub_menu"><a href="{{ app.request.basePath }}/financialvalidatetransferfile/68">validation 1</a>
+                            </li>
+                            <li><a href="{{ app.request.basePath }}/financialvalidatetransferfile/67">2</a>
+                            </li>
+                            <li><a href="{{ app.request.basePath }}/financialvalidatetransferfile/66">3</a>
+                            </li>
+                          </ul>
+                        </li>                      
                     </ul>
                   </li>
 
@@ -186,81 +196,10 @@
                   </ul>
                 </li>
 
-                <li role="presentation" class="dropdown">
-                  <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
-                    <i class="fa fa-envelope-o"></i>
-                    <span class="badge bg-green">6</span>
-                  </a>
-                  <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-                    <li>
-                      <a>
-                        <span class="image"><img src="{{ asset('assets/images/img.jpg') }}" alt="Profile Image" /></span>
-                        <span>
-                          <span>John Smith3</span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a>
-                        <span class="image"><img src="{{ asset('assets/images/img.jpg') }}" alt="Profile Image" /></span>
-                        <span>
-                          <span>John Smith4</span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a>
-                        <span class="image"><img src="{{ asset('assets/images/img.jpg') }}" alt="Profile Image" /></span>
-                        <span>
-                          <span>John Smith5</span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a>
-                        <span class="image"><img src="{{ asset('assets/images/img.jpg') }}" alt="Profile Image" /></span>
-                        <span>
-                          <span>John Smith6</span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <div class="text-center">
-                        <a>
-                          <strong>See All Alerts</strong>
-                          <i class="fa fa-angle-right"></i>
-                        </a>
-                      </div>
-                    </li>
-                  </ul>
-                </li>
               </ul>
             </nav>
           </div>
         </div>
-    {% for label, flashes in app.session.flashbag.all %}
-        {% for flash in flashes %}
-            <div class="alert alert-{{ label }}">
-                {{ flash }}
-            </div>
-        {% endfor %}
-    {% endfor %}
 {% endblock %}
     
     
@@ -299,33 +238,6 @@
 
     <script src="{{ asset('assets/build/js/custom.min.js') }}"></script>
 
-    <script>
-      $(document).ready(function() {
-
-        $('#datatable').dataTable();
-
-        $('#datatable-responsive').DataTable();
-
-        $('#datatable-fixed-header').DataTable({
-          fixedHeader: true
-        });
-
-        var $datatable = $('#datatable-checkbox');
-
-        $datatable.dataTable({
-          'order': [[ 1, 'asc' ]],
-          'columnDefs': [
-            { orderable: false, targets: [0] }
-          ]
-        });
-        $datatable.on('draw.dt', function() {
-          $('input').iCheck({
-            checkboxClass: 'icheckbox_flat-green'
-          });
-        });
-
-      });
-    </script>
     {% block page_footer_javascripts %}{% endblock %}
 {% endblock %}
         
